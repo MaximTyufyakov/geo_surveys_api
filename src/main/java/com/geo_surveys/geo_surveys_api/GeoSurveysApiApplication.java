@@ -11,7 +11,7 @@ public class GeoSurveysApiApplication {
     public static void main(String[] args) {
       SpringApplication.run(GeoSurveysApiApplication.class, args);
     }
-    // @Value("${DB_PASSWORD}")
+    // @Value("${spring.datasource.url}")
     // private String dbPassword;
 
     @GetMapping("/hello")
