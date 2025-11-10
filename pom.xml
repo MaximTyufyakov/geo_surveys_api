@@ -12,7 +12,7 @@
     <artifactId>geo_surveys_api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>geo_surveys_api</name>
-    <description>Demo project for Spring Boot</description>
+    <description>API for geo-control surveys.</description>
     <url/>
     <licenses>
         <license/>
@@ -43,7 +43,17 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
