@@ -19,6 +19,21 @@ Uses the MVC patern.
 
 ## Database administration
 
+### Trigger for updated_at
+CREATE OR REPLACE FUNCTION set_updated_at()\
+RETURNS TRIGGER AS \$$\
+BEGIN\
+NEW.updated_at := NOW();\
+RETURN NEW;\
+END;\
+$$ LANGUAGE plpgsql;\
+
+CREATE TRIGGER before_update_user\
+BEFORE UPDATE ON user\
+FOR EACH ROW\
+EXECUTE FUNCTION set_updated_at();
+
+
 ### Test users
 
 1. login = 'test_1', password = 'pas_1';
