@@ -1,23 +1,27 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.geo_surveys.geo_surveys_api.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for user.
+ */
 @Service
 public class UserService {
-    @Value("${spring.datasource.url}")
-    private String dbUrl;
 
-    @Value("${spring.datasource.username}")
-    private String dbUsername;
+    @Autowired
+    private UserRepository userRepo;
 
-    @Value("${spring.datasource.password}")
-    private String dbPassword;
-
-    public UserService() {
-    }
-
+    /**
+     * Main authentication function.
+     *
+     * @param login    username.
+     * @param password user password.
+     * @return token.
+     */
     public String generateToken(String login, String password) {
         return login + password;
     }
+
 }
