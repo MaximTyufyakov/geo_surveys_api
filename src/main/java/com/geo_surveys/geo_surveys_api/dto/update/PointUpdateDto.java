@@ -1,10 +1,10 @@
-package com.geo_surveys.geo_surveys_api.dto;
+package com.geo_surveys.geo_surveys_api.dto.update;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * DTO for point body.
+ * DTO for point update (request).
  */
 public record PointUpdateDto(
 

@@ -24,8 +24,6 @@ public class UserService {
      * @return token.
      */
     public String generateToken(String login, String password) {
-        User user = new User(null, "123", "112", Instant.now(), Instant.now());
-        userRepo.save(user);
         return login + password;
     }
 
