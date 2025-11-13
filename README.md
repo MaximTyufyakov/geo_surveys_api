@@ -11,11 +11,14 @@ Uses the MVC patern.
 - All Flutter SQL -> API SQL.
 - Sync with flutter local db.
 
-## Before build
-1.Set secret environment variables or CLI arguments (look application.properties).
-
-## Docker
-- For jar create: ./mvnw package; java -jar target/geo_surveys_api-0.0.1-SNAPSHOT.jar
+## Build
+1. Create database:
+   * By geosurveys_schema.sql (recommended);
+   * By sping:
+     1. spring.jpa.hibernate.ddl-auto=create;
+     2. Run app;
+     3. Create "updated at" triggers for all entities ([Trigger for updated_at](#trigger-for-updated_at)).
+2. Set secret environment variables or CLI arguments (look application.properties).
 
 ## Database administration
 
@@ -32,7 +35,6 @@ CREATE TRIGGER before_update_user\
 BEFORE UPDATE ON user\
 FOR EACH ROW\
 EXECUTE FUNCTION set_updated_at();
-
 
 ### Test users
 
