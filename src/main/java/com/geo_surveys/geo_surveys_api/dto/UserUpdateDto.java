@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 /**
  * DTO for user body.
  */
-public record UserDto(
+public record UserUpdateDto(
 
         @NotNull(message = "Отстутсвует поле login.")
         @Size(min = 3, message = "Поле login должно содержать от 3 символов.")

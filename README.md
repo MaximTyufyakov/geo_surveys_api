@@ -41,13 +41,13 @@ EXECUTE FUNCTION set_updated_at();
 
 ### User create
 
-- INSERT INTO public."userDto"(
+- INSERT INTO public."user"(
   login, "password")
   VALUES ('login', crypt('password', gen_salt('bf')));
 
 ### Password update
 
-- UPDATE public."userDto"
+- UPDATE public."user"
   SET password = crypt('password', gen_salt('bf'))
   WHERE login = 'login';
 

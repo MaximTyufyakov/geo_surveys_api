@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.geo_surveys.geo_surveys_api.dto.UserDto;
+import com.geo_surveys.geo_surveys_api.dto.UserUpdateDto;
 import com.geo_surveys.geo_surveys_api.service.UserService;
 
 /**
@@ -20,12 +20,13 @@ public class UserController {
     /**
      * Authentication function.
      *
-     * @param userDto is user information.
+     * @param userUpdateDto is user information.
      * @return token.
      */
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.CREATED)
-    public String auth(@Valid @RequestBody UserDto userDto) {
-        return userService.generateToken(userDto.login(), userDto.password());
+    public String auth(@Valid @RequestBody UserUpdateDto userUpdateDto) {
+        return userService.generateToken(userUpdateDto.login(), userUpdateDto.password());
     }
+
 }

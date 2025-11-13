@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 /**
  * DTO for point body.
  */
-public record PointDto(
+public record PointUpdateDto(
 
         @NotNull(message = "Отстутсвует поле pointid.")
         @Min(value = 1, message = "pointid должно быть больше 0.")

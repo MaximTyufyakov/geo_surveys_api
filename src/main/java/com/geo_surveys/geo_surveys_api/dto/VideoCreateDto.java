@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 /**
  * DTO for video body.
  */
-public record VideoDto(
+public record VideoCreateDto(
 
         @NotNull(message = "Отстутсвует поле taskid.")
         @Min(value = 1, message = "taskid должно быть больше 0.")
