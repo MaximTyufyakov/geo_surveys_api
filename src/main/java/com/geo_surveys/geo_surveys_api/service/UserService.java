@@ -1,5 +1,6 @@
 package com.geo_surveys.geo_surveys_api.service;
 
+import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.entity.User;
 import com.geo_surveys.geo_surveys_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class UserService {
      */
     public String generateToken(String login, String password) {
         return login + password;
+
+
     }
 
 

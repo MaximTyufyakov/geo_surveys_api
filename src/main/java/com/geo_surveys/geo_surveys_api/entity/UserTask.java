@@ -1,33 +1,34 @@
 package com.geo_surveys.geo_surveys_api.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.Check;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 /**
- * Entity for user.
+ * Entity for user_task (many to many).
  */
 @Entity
-@Table(name = "user", schema = "public")
+@Table( name = "user_task",
+        schema = "public",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"userid", "taskid"}))
 @Getter
 @NoArgsConstructor
-public class User {
-
-    // Columns.
+public class UserTask {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userid")
-    private Long userId;
+    @Column(name = "usertaskid")
+    private Long userTaskId;
 
-    @Column(name = "login", length = 50, nullable = false, unique = true)
-    @Check(constraints = "length(login::text) >= 3")
-    private String login;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    private User user;
 
-    @Column(name = "password", nullable = false, columnDefinition = "text")
-    private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "taskid")
+    private Task task;
 
     @Column(name = "created_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
@@ -36,7 +37,4 @@ public class User {
     @Column(name = "updated_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
     private Instant updatedAt;
-
 }
-
-

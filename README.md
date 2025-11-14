@@ -12,13 +12,9 @@ Uses the MVC patern.
 - Sync with flutter local db.
 
 ## Build
-1. Create database:
-   * By geosurveys_schema.sql (recommended);
-   * By sping:
-     1. spring.jpa.hibernate.ddl-auto=create;
-     2. Run app;
-     3. Create "updated at" triggers for all entities ([Trigger for updated_at](#trigger-for-updated_at)).
+1. Create postgres database by geosurveys_schema.sql;
 2. Set secret environment variables or CLI arguments (look application.properties).
+3. Run.
 
 ## Database administration
 
