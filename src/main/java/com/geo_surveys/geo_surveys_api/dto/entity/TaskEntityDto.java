@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 
+/**
+ * DTO for task entity (response and request).
+ */
 public record TaskEntityDto(
         @NotNull(message = "Отсутствует поле task_id")
         @Min(value = 1, message = "task_id должно быть больше 0")

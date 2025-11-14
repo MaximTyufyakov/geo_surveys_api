@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
 
+/**
+ * DTO for point entity (response and request).
+ */
 public record PointEntityDto(
         @NotNull(message = "Отсутствует поле point_id")
         @Min(value = 1, message = "point_id должно быть больше 0")

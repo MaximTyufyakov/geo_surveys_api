@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
 
+/**
+ * DTO for user_task entity (response and request).
+ */
 public record UserTaskEntityDto(
         @NotNull(message = "Отсутствует поле user_task_id")
         @Min(value = 1, message = "user_task_id должно быть больше 0")
