@@ -14,7 +14,7 @@ import java.time.Instant;
 @Entity
 @Table( name = "point",
         schema = "public",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"taskid", "number"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"task_id", "number"})
 )
 @Getter
 @NoArgsConstructor
@@ -22,11 +22,11 @@ public class Point {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "pointid")
+    @Column(name = "point_id")
     private Long pointId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taskid", nullable = false)
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
     @Column(name = "number", nullable = false)

@@ -13,18 +13,18 @@ import java.time.Instant;
 @Entity
 @Table( name = "video",
         schema = "public",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"taskid", "title"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"task_id", "title"}))
 @Getter
 @NoArgsConstructor
 public class Video {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "videoid")
+    @Column(name = "video_id")
     private Long videoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taskid")
+    @JoinColumn(name = "task_id")
     @Setter
     private Task task;
 

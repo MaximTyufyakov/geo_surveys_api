@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotNull;
  */
 public record TaskUpdateDto(
 
-        @NotNull(message = "Отстутсвует поле taskid.")
-        @Min(value = 1, message = "taskid должно быть больше 0.")
-        Long taskid,
+        @NotNull(message = "Отстутсвует поле task_id")
+        @Min(value = 1, message = "task_id должно быть больше 0")
+        Long task_id,
 
-        @NotNull(message = "Отстутсвует поле completed.")
+        @NotNull(message = "Отстутсвует поле completed")
         Boolean completed,
 
         String report

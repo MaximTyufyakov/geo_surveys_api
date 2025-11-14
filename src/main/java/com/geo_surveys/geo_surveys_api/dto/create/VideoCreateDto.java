@@ -9,14 +9,14 @@ import jakarta.validation.constraints.NotNull;
  */
 public record VideoCreateDto(
 
-        @NotNull(message = "Отстутсвует поле taskid.")
-        @Min(value = 1, message = "taskid должно быть больше 0.")
-        Long taskid,
+        @NotNull(message = "Отстутсвует поле task_id")
+        @Min(value = 1, message = "task_id должно быть больше 0")
+        Long task_id,
 
-        @NotBlank(message = "Название не может быть пустым.")
+        @NotBlank(message = "Название не может быть пустым")
         String title,
 
-        @NotBlank(message = "Файл не может быть пустым.")
+        @NotBlank(message = "Файл не может быть пустым")
         String file
 ) {
 

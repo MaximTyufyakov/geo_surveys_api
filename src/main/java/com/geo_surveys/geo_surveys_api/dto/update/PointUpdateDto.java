@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotNull;
  */
 public record PointUpdateDto(
 
-        @NotNull(message = "Отстутсвует поле pointid.")
-        @Min(value = 1, message = "pointid должно быть больше 0.")
-        Long pointid,
+        @NotNull(message = "Отстутсвует поле point_id")
+        @Min(value = 1, message = "point_id должно быть больше 0")
+        Long point_id,
 
-        @NotNull(message = "Отстутсвует поле completed.")
+        @NotNull(message = "Отстутсвует поле completed")
         Boolean completed
 ) {
 

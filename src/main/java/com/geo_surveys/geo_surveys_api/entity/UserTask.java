@@ -12,22 +12,22 @@ import java.time.Instant;
 @Entity
 @Table( name = "user_task",
         schema = "public",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"userid", "taskid"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "task_id"}))
 @Getter
 @NoArgsConstructor
 public class UserTask {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usertaskid")
+    @Column(name = "user_task_id")
     private Long userTaskId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userid")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "taskid")
+    @JoinColumn(name = "task_id")
     private Task task;
 
     @Column(name = "created_at", nullable = false,
