@@ -24,22 +24,17 @@ public class UserController {
     /**
      * Authentication function.
      *
-     * @param userUpdateDto is user information.
+     * @param tokenCreateDto is user information.
      * @return token.
      */
     @PostMapping("/auth")
-    public ResponseEntity<String> auth(@Valid @RequestBody TokenCreateDto userUpdateDto) {
+    public ResponseEntity<String> auth(@Valid @RequestBody TokenCreateDto tokenCreateDto) {
         try{
-            String token =  userService.auth(userUpdateDto.login(), userUpdateDto.password());
+            String token =  userService.auth(tokenCreateDto.login(), tokenCreateDto.password());
             return ResponseEntity.status(HttpStatus.CREATED).body(token);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
-    }
-
-    @PostMapping("/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.status(HttpStatus.CREATED).body("Ok");
     }
 
 }
