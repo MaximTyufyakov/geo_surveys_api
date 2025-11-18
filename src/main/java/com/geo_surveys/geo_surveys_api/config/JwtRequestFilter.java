@@ -18,9 +18,6 @@ import java.io.IOException;
 /**
  * JWT Request Filter that processes JWT tokens from incoming requests.
  * This filter intercepts each request to validate JWT tokens and set up Spring Security context.
- *
- * @author Your Name
- * @version 1.0
  */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {

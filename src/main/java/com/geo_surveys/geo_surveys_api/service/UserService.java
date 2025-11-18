@@ -18,6 +18,7 @@ import java.util.Date;
 
 /**
  * Service for user.
+ * Contains authentication functions.
  */
 @Service
 public class UserService {
@@ -29,11 +30,14 @@ public class UserService {
     private UserRepository userRepo;
 
     /**
-     * Secret key for jwt token.
+     * Secret key for generating jwt token.
      */
     @Value("${spring.jwt.secret}")
     private String SECRET_KEY;
 
+    /**
+     * Interface for hashing.
+     */
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -91,6 +95,7 @@ public class UserService {
      *
      * @param token client token.
      * @return true if token hasn't expired.
+     * @throws AuthenticationException if authentication failed.
      */
     public boolean validateToken(String token) throws AuthenticationException {
         try {
@@ -105,6 +110,7 @@ public class UserService {
      *
      * @param token client token.
      * @return user id.
+     * @throws AuthenticationException if authentication failed.
      */
     public Long extractId(String token) throws AuthenticationException {
         try {

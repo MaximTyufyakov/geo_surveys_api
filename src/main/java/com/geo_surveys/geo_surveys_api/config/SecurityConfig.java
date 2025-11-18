@@ -15,9 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Security configuration class for Spring Security setup.
  * Configures JWT authentication, authorization rules, and security filters.
- *
- * @author Your Name
- * @version 1.0
  */
 @Configuration
 @EnableWebSecurity
@@ -57,7 +54,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints - no authentication required
                         .requestMatchers("/users/auth").permitAll()
-                        .requestMatchers("/error").permitAll()
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()
