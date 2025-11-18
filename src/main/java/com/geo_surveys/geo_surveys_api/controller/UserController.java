@@ -11,6 +11,7 @@ import com.geo_surveys.geo_surveys_api.dto.create.TokenCreateDto;
 import com.geo_surveys.geo_surveys_api.service.UserService;
 
 import javax.naming.AuthenticationException;
+import java.util.Map;
 
 /**
  * Controller for work with user.
@@ -28,12 +29,16 @@ public class UserController {
      * @return token.
      */
     @PostMapping("/auth")
-    public ResponseEntity<String> auth(@Valid @RequestBody TokenCreateDto tokenCreateDto) {
-        try{
-            String token =  userService.auth(tokenCreateDto.login(), tokenCreateDto.password());
-            return ResponseEntity.status(HttpStatus.CREATED).body(token);
+    public ResponseEntity<Map<String, String>> auth(@Valid @RequestBody TokenCreateDto tokenCreateDto) {
+        try {
+            String token = userService.auth(tokenCreateDto.login(), tokenCreateDto.password());
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.ofEntries(
+                    Map.entry("token", token)
+            ));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.ofEntries(
+                    Map.entry("message", e.getMessage())
+            ));
         }
     }
 

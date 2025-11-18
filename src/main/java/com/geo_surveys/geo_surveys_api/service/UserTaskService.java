@@ -23,6 +23,17 @@ public class UserTaskService {
     private UserTaskRepository userTaskRepo;
 
     /**
+     * Check user-task relation.
+     *
+     * @param userId user id.
+     * @param taskId task id.
+     * @return true if relation exist.
+     */
+    public boolean existRelation(Long userId, Long taskId){
+        return userTaskRepo.findByUserIdAndTaskId(userId, taskId) != null;
+    }
+
+    /**
      * Convert UserTask entity to UserTaskDto
      *
      * @param userTask the Task entity
