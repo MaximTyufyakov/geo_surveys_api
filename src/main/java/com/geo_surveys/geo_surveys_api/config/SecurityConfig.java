@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints - no authentication required
                         .requestMatchers("/users/auth").permitAll()
+                        .requestMatchers("/error").permitAll()
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()
