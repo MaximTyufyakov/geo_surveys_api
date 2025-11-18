@@ -4,17 +4,14 @@ import com.geo_surveys.geo_surveys_api.dto.entity.TaskEntityDto;
 import com.geo_surveys.geo_surveys_api.entity.Task;
 import com.geo_surveys.geo_surveys_api.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 /**
- * Service for user.
- * Contains authentication functions.
+ * Service for task.
  */
 @Service
 public class TaskService {
