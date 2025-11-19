@@ -49,9 +49,11 @@ public class Task {
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("number ASC")
     private List<Point> points;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    @OrderBy("title ASC")
     @Setter
     private List<Video> videos;
 

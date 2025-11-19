@@ -75,17 +75,9 @@ public class TaskService {
                 // Parsing.
                 TaskEntityDto taskDto = convertToDto(task);
                 List<PointEntityDto> pointsDto =
-                        pointService
-                                .convertToDtoList(task.getPoints())
-                                .stream()
-                                .sorted(Comparator.comparingInt(PointEntityDto::number))
-                                .toList();
+                        pointService.convertToDtoList(task.getPoints());
                 List<VideoEntityDto> videosDto =
-                        videoService
-                                .convertToDtoList(task.getVideos())
-                                .stream()
-                                .sorted(Comparator.comparingLong(VideoEntityDto::video_id))
-                                .toList();
+                        videoService.convertToDtoList(task.getVideos());
 
                 return Map.ofEntries(
                         Map.entry("task", taskDto),
