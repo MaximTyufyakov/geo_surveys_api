@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -74,9 +75,17 @@ public class TaskService {
                 // Parsing.
                 TaskEntityDto taskDto = convertToDto(task);
                 List<PointEntityDto> pointsDto =
-                        pointService.convertToDtoList(task.getPoints());
+                        pointService
+                                .convertToDtoList(task.getPoints())
+                                .stream()
+                                .sorted(Comparator.comparingInt(PointEntityDto::number))
+                                .toList();
                 List<VideoEntityDto> videosDto =
-                        videoService.convertToDtoList(task.getVideos());
+                        videoService
+                                .convertToDtoList(task.getVideos())
+                                .stream()
+                                .sorted(Comparator.comparingLong(VideoEntityDto::video_id))
+                                .toList();
 
                 return Map.ofEntries(
                         Map.entry("task", taskDto),

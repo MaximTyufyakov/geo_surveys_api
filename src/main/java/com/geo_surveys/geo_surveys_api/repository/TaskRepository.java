@@ -19,6 +19,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
      * @param userId the ID of the user.
      * @return list of tasks associated with the user.
      */
-    @Query("SELECT t FROM Task t JOIN t.userTasks ut WHERE ut.user.userId = :userId")
+    @Query( " SELECT t FROM Task t" +
+            " JOIN t.userTasks ut" +
+            " WHERE ut.user.userId = :userId" +
+            " ORDER BY t.taskId ASC")
     List<Task> findAllByUserId(@Param("userId") Long userId);
 }
