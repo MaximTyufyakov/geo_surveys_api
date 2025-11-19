@@ -1,16 +1,16 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
 import com.geo_surveys.geo_surveys_api.dto.entity.TaskEntityDto;
+import com.geo_surveys.geo_surveys_api.dto.update.TaskUpdateDto;
 import com.geo_surveys.geo_surveys_api.service.TaskService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -67,7 +67,39 @@ public class TaskController {
                             Map.entry("message", e.getMessage())
                     ));
         }
-        catch (NullPointerException e) {
+        catch (EntityNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(Map.ofEntries(
+                            Map.entry("message", e.getMessage())
+                    ));
+        }
+    }
+
+    /**
+     * Update task with points and videos.
+     *
+     * @param authentication is authentication data.
+     * @param taskUpdateDto is updated data.
+     * @return map: actual task, points, videos.
+     */
+    @PutMapping("/save")
+    public ResponseEntity<Map<String, Object>> update(
+            Authentication authentication,
+            @Valid @RequestBody TaskUpdateDto taskUpdateDto) {
+        Long userId = (Long) authentication.getPrincipal();
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(taskService.update(userId, taskUpdateDto));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(Map.ofEntries(
+                            Map.entry("message", e.getMessage())
+                    ));
+        }
+        catch (EntityNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(Map.ofEntries(

@@ -1,12 +1,16 @@
 package com.geo_surveys.geo_surveys_api.service;
 
 import com.geo_surveys.geo_surveys_api.dto.entity.PointEntityDto;
+import com.geo_surveys.geo_surveys_api.dto.update.PointUpdateDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -21,6 +25,57 @@ public class PointService {
      */
     @Autowired
     private PointRepository pointRepo;
+
+    /**
+     * Update point list by data in dto.
+     *
+     * @param points          is target points.
+     * @param pointUpdateDtos is new data.
+     */
+    public List<Point> updateList(List<Point> points, List<PointUpdateDto> pointUpdateDtos) {
+        // Map for get pointUpdateDto by id.
+        Map<Long, PointUpdateDto> pointUpdateDtosMap = pointUpdateDtos.stream()
+                .collect(Collectors.toMap(PointUpdateDto::point_id, Function.identity()));
+        // Ret list.
+        List<Point> updated = new ArrayList<>();
+        // Update.
+        for (Point point : points) {
+            PointUpdateDto pointUpdateDto = pointUpdateDtosMap.get(point.getPointId());
+            // PointUpdateDto exist.
+            if (pointUpdateDto != null) {
+                point = update(point, pointUpdateDto);
+            }
+            updated.add(point);
+        }
+        return  updated;
+    }
+
+    /**
+     * Update point by data in dto.
+     *
+     * @param point          is target point.
+     * @param pointUpdateDto is new data.
+     */
+    private Point update(Point point, PointUpdateDto pointUpdateDto) {
+        // Point update.
+        point.setCompleted(pointUpdateDto.completed());
+        return pointRepo.save(point);
+    }
+
+    /**
+     * Check points completed.
+     *
+     * @param points is target points.
+     * @return true if all points completed.
+     */
+    public boolean allCompleted(List<Point> points){
+        for (Point point : points) {
+            if (point.getCompleted() == false){
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * Convert Point entity to PointDto

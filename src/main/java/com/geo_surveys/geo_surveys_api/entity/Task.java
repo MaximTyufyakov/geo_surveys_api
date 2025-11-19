@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -28,9 +29,11 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    // For PostgreSQL point type - using custom converter or separate class
-    @Column(name = "coordinates", columnDefinition = "point")
-    private String coordinates;
+    @Column(name = "latitude")
+    private BigDecimal latitude;
+
+    @Column(name = "longitude")
+    private BigDecimal longitude;
 
     @Column(name = "completed", nullable = false)
     @Setter

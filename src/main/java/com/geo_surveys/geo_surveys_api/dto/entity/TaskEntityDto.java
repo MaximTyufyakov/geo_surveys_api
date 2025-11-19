@@ -1,10 +1,12 @@
 package com.geo_surveys.geo_surveys_api.dto.entity;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 /**
@@ -21,7 +23,9 @@ public record TaskEntityDto(
 
         String description,
 
-        String coordinates,
+        BigDecimal latitude,
+
+        BigDecimal longitude,
 
         @NotNull(message = "Отсутствует поле completed")
         Boolean completed,
