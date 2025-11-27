@@ -6,13 +6,11 @@ Uses the MVC patern.
 
 ## To do
 
-- DB connecttion and migration.
-- Login with token.
 - All Flutter SQL -> API SQL.
 - Sync with flutter local db.
 
 ## Build
-1. Create postgres database by geosurveys_schema.sql;
+1. Create postgres database by geosurveys_schema.sql (in project root);
 2. Set secret environment variables or CLI arguments (look application.properties).
 3. Run.
 
