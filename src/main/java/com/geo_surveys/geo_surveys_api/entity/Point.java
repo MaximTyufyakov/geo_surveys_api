@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Check;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -42,10 +44,12 @@ public class Point {
 
     @Column(name = "created_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
+    @CreationTimestamp
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
+    @UpdateTimestamp
     private Instant updatedAt;
 }
 

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -43,10 +45,12 @@ public class Task {
     @Setter
     private String report;
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
     private Instant createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
     private Instant updatedAt;

@@ -3,6 +3,8 @@ package com.geo_surveys.geo_surveys_api.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Check;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -29,10 +31,12 @@ public class User {
     @Column(name = "password", nullable = false, columnDefinition = "text")
     private String password;
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
     private Instant createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at", nullable = false,
             columnDefinition = "timestamp with time zone default now()")
     private Instant updatedAt;
