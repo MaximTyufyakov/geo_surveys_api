@@ -102,27 +102,29 @@ public class TaskService {
             // Check task exist.
             if (task != null) {
                 // Points update.
-                List<Point> updatedPoints = pointService.updateList(
-                        task.getPoints(),
+                List<Point> points = task.getPoints();
+                pointService.updateList(
+                        points,
                         taskUpdateDto.updatedPoints()
                 );
 
                 // Videos delete.
-                List<Video> updatedVideos = videoService.deleteList(
-                        task.getVideos(),
+                List<Video> videos = task.getVideos();
+                videoService.deleteList(
+                        videos,
                         taskUpdateDto.deletedVideos()
                 );
 
                 // Videos create.
-                updatedVideos = videoService.createList(
+                videoService.createList(
                         task,
-                        updatedVideos,
+                        videos,
                         taskUpdateDto.createdVideos()
                 );
 
                 // Completed check.
                 boolean completed =
-                        pointService.allCompleted(updatedPoints) && !updatedVideos.isEmpty();
+                        pointService.allCompleted(points) && !videos.isEmpty();
 
                 // Task update.
                 task.setCompleted(completed);

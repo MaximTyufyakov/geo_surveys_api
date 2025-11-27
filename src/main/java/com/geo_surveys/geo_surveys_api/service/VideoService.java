@@ -28,16 +28,16 @@ public class VideoService {
     /**
      * Delete videos.
      *
+     * @param videos  list with target videos
      * @param deleted list with videos id.
      */
-    public List<Video> deleteList(List<Video> videos, List<Long> deleted) {
+    public void deleteList(List<Video> videos, List<Long> deleted) {
         for (Long id : deleted) {
             videoRepo.deleteById(id);
             videos.removeIf(
                     video -> video.getVideoId().equals(id)
             );
         }
-        return videos;
     }
 
     /**
@@ -46,44 +46,47 @@ public class VideoService {
      * @param task             is parent task.
      * @param videos           is list with all videos in task.
      * @param createdVideoDtos is target data.
-     * @return updated video list.
      */
-    public List<Video> createList(
+    public void createList(
             Task task,
             List<Video> videos,
             List<VideoCreateDto> createdVideoDtos) {
+        // All titles.
+        List<String> titles = videos.stream()
+                .map(Video::getTitle)
+                .collect(Collectors.toList());
         for (VideoCreateDto createdVideoDto : createdVideoDtos) {
             // Generate unique title.
-            List<String> titles = videos.stream()
-                    .map(Video::getTitle)
-                    .toList();
-            String title = generateUniqueName(titles, createdVideoDto.title());
+            String title = generateUniqueTitle(titles, createdVideoDto.title());
+            titles.add(title);
 
+            // Create video.
             Video video = new Video();
             video.setTask(task);
             video.setTitle(title);
             video.setUrl(createdVideoDto.file() + " " + Instant.now());
 
+            // Add video.
             videos.add(videoRepo.save(video));
         }
-        return videos;
     }
 
     /**
      *
-     * @param names
-     * @param name
-     * @return
+     * @param titles all videos titles
+     * @param title new title
+     * @return unique title
      */
-    private String generateUniqueName(List<String> names, String name) {
-        // Создаем множество для быстрого поиска существующих имен
-        java.util.Set<String> existingNames = new java.util.HashSet<>(names);
-        String result = name;
+    private String generateUniqueTitle(List<String> titles, String title) {
+        // Create HashSet for titles.
+        java.util.Set<String> existingTitles = new java.util.HashSet<>(titles);
+        String result = title;
         int counter = 1;
 
-        // Проверяем существование имени и генерируем новое при необходимости
-        while (existingNames.contains(result)) {
-            result = name + " (" + counter + ")";
+        // Check title exist.
+        while (existingTitles.contains(result)) {
+            // Change if title exist.
+            result = title + " (" + counter + ")";
             counter++;
         }
         return result;

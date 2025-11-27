@@ -32,22 +32,18 @@ public class PointService {
      * @param points          is target points.
      * @param pointUpdateDtos is new data.
      */
-    public List<Point> updateList(List<Point> points, List<PointUpdateDto> pointUpdateDtos) {
+    public void updateList(List<Point> points, List<PointUpdateDto> pointUpdateDtos) {
         // Map for get pointUpdateDto by id.
         Map<Long, PointUpdateDto> pointUpdateDtosMap = pointUpdateDtos.stream()
                 .collect(Collectors.toMap(PointUpdateDto::point_id, Function.identity()));
-        // Ret list.
-        List<Point> updated = new ArrayList<>();
         // Update.
         for (Point point : points) {
             PointUpdateDto pointUpdateDto = pointUpdateDtosMap.get(point.getPointId());
             // PointUpdateDto exist.
             if (pointUpdateDto != null) {
-                point = update(point, pointUpdateDto);
+                update(point, pointUpdateDto);
             }
-            updated.add(point);
         }
-        return  updated;
     }
 
     /**
@@ -56,10 +52,10 @@ public class PointService {
      * @param point          is target point.
      * @param pointUpdateDto is new data.
      */
-    private Point update(Point point, PointUpdateDto pointUpdateDto) {
+    private void update(Point point, PointUpdateDto pointUpdateDto) {
         // Point update.
         point.setCompleted(pointUpdateDto.completed());
-        return pointRepo.save(point);
+        pointRepo.save(point);
     }
 
     /**
