@@ -33,14 +33,14 @@ public class PointService {
      * @param pointUpdateDtos is new data.
      */
     public void updateList(List<Point> points, List<PointUpdateDto> pointUpdateDtos) {
-        // Map for get pointUpdateDto by id.
-        Map<Long, PointUpdateDto> pointUpdateDtosMap = pointUpdateDtos.stream()
-                .collect(Collectors.toMap(PointUpdateDto::point_id, Function.identity()));
+        // Map for get point by id.
+        Map<Long, Point> pointMap = points.stream()
+                .collect(Collectors.toMap(Point::getPointId, Function.identity()));
         // Update.
-        for (Point point : points) {
-            PointUpdateDto pointUpdateDto = pointUpdateDtosMap.get(point.getPointId());
-            // PointUpdateDto exist.
-            if (pointUpdateDto != null) {
+        for (PointUpdateDto pointUpdateDto : pointUpdateDtos) {
+            Point point = pointMap.get(pointUpdateDto.point_id());
+            // Point exist.
+            if (point != null) {
                 update(point, pointUpdateDto);
             }
         }
