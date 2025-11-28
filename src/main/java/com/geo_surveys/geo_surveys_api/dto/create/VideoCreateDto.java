@@ -13,7 +13,7 @@ public record VideoCreateDto(
         String title,
 
         @NotBlank(message = "Файл не может быть пустым")
-        String file
+        String file // Base64 encoded video
 ) {
 
 }
