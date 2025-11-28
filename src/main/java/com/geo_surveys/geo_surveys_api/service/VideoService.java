@@ -2,6 +2,7 @@ package com.geo_surveys.geo_surveys_api.service;
 
 import com.geo_surveys.geo_surveys_api.dto.create.VideoCreateDto;
 import com.geo_surveys.geo_surveys_api.dto.entity.VideoEntityDto;
+import com.geo_surveys.geo_surveys_api.dto.update.PointUpdateDto;
 import com.geo_surveys.geo_surveys_api.entity.Task;
 import com.geo_surveys.geo_surveys_api.entity.Video;
 import com.geo_surveys.geo_surveys_api.repository.VideoRepository;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -26,17 +29,33 @@ public class VideoService {
     private VideoRepository videoRepo;
 
     /**
+     * Service for work with S3.
+     */
+    @Autowired
+    private S3Service s3Service;
+
+    /**
      * Delete videos.
      *
-     * @param videos  list with target videos
+     * @param videos  list with target videos.
      * @param deleted list with videos id.
      */
     public void deleteList(List<Video> videos, List<Long> deleted) {
+        // Map for get video by id.
+        Map<Long, Video> videosMap = videos.stream()
+                .collect(Collectors.toMap(Video::getVideoId, Function.identity()));
         for (Long id : deleted) {
-            videoRepo.deleteById(id);
-            videos.removeIf(
-                    video -> video.getVideoId().equals(id)
-            );
+            Video video = videosMap.get(id);
+            if (video != null) {
+                // Delete from S3.
+                s3Service.deleteFromS3(video.getUrl());
+                // Delete from db.
+                videoRepo.deleteById(id);
+                // Delete from list.
+                videos.removeIf(
+                        elem -> elem.getVideoId().equals(id)
+                );
+            }
         }
     }
 
@@ -46,11 +65,12 @@ public class VideoService {
      * @param task             is parent task.
      * @param videos           is list with all videos in task.
      * @param createdVideoDtos is target data.
+     * @throws IllegalArgumentException – if upload video in S3 fails.
      */
     public void createList(
             Task task,
             List<Video> videos,
-            List<VideoCreateDto> createdVideoDtos) {
+            List<VideoCreateDto> createdVideoDtos) throws IllegalArgumentException {
         // All titles.
         List<String> titles = videos.stream()
                 .map(Video::getTitle)
@@ -64,9 +84,18 @@ public class VideoService {
             Video video = new Video();
             video.setTask(task);
             video.setTitle(title);
-            video.setUrl(createdVideoDto.file() + " " + Instant.now());
 
-            // Add video.
+            // Save in S3.
+            String key = String.format(
+                    "%s/%s.%s",
+                    task.getTitle(),
+                    title,
+                    createdVideoDto.format()
+            );
+            String url = s3Service.uploadVideo(createdVideoDto.file(), key, createdVideoDto.format());
+            video.setUrl(url);
+
+            // Save in db and add in list.
             videos.add(videoRepo.save(video));
         }
     }

@@ -25,7 +25,7 @@ public class Task {
     @Column(name = "task_id")
     private Long taskId;
 
-    @Column(name = "title", length = 100, nullable = false)
+    @Column(name = "title", length = 100, nullable = false, unique = true)
     private String title;
 
     @Column(name = "description")
