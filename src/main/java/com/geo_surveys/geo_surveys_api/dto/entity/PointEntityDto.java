@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
 /**
- * DTO for point entity (response and request).
+ * DTO for point entity (response for synchronization and request).
  */
 public record PointEntityDto(
         @NotNull(message = "Отсутствует поле point_id")
