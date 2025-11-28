@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import java.time.Instant;
 
 /**
- * DTO for video entity (response and request).
+ * DTO for video entity (response for synchronization and request).
  */
 public record VideoEntityDto(
         @NotNull(message = "Отсутствует поле video_id")

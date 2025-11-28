@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 /**
- * DTO for task entity (response and request).
+ * DTO for task entity (response for synchronization and request).
  */
 public record TaskEntityDto(
         @NotNull(message = "Отсутствует поле task_id")

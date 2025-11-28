@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
 /**
- * DTO for user_task entity (response and request).
+ * DTO for user_task entity (response for synchronization and request).
  */
 public record UserTaskEntityDto(
         @NotNull(message = "Отсутствует поле user_task_id")

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.time.Instant;
 
 /**
- * DTO for user entity (response and request).
+ * DTO for user entity (response for synchronization and request).
  */
 public record UserEntityDto(
         @NotNull(message = "Отсутствует поле user_id")
