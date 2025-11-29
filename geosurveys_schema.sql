@@ -5,7 +5,7 @@
 -- Dumped from database version 16.4
 -- Dumped by pg_dump version 16.4
 
--- Started on 2025-11-14 18:27:23
+-- Started on 2025-11-29 11:43:32
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -27,7 +27,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 
 --
--- TOC entry 4942 (class 0 OID 0)
+-- TOC entry 4944 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
 --
@@ -91,7 +91,7 @@ CREATE SEQUENCE public.point_pointid_seq
 ALTER SEQUENCE public.point_pointid_seq OWNER TO maxim_pg;
 
 --
--- TOC entry 4943 (class 0 OID 0)
+-- TOC entry 4945 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: point_pointid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maxim_pg
 --
@@ -109,10 +109,12 @@ CREATE TABLE public.task (
     title character varying(100) NOT NULL,
     description text,
     coordinates point,
+    latitude numeric,
+    longitude numeric,
     completed boolean NOT NULL,
     report text,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -134,7 +136,7 @@ CREATE SEQUENCE public.task_taskid_seq
 ALTER SEQUENCE public.task_taskid_seq OWNER TO maxim_pg;
 
 --
--- TOC entry 4944 (class 0 OID 0)
+-- TOC entry 4946 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: task_taskid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maxim_pg
 --
@@ -151,8 +153,8 @@ CREATE TABLE public."user" (
     user_id bigint NOT NULL,
     login character varying(50) NOT NULL,
     password character varying(100) NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now(),
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT min_login CHECK ((length((login)::text) >= 3))
 );
 
@@ -165,11 +167,11 @@ ALTER TABLE public."user" OWNER TO maxim_pg;
 --
 
 CREATE TABLE public.user_task (
+    user_task_id bigint NOT NULL,
     user_id bigint NOT NULL,
     task_id bigint NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now(),
-    user_task_id bigint NOT NULL
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -191,7 +193,7 @@ CREATE SEQUENCE public.user_task_usertaskid_seq
 ALTER SEQUENCE public.user_task_usertaskid_seq OWNER TO maxim_pg;
 
 --
--- TOC entry 4945 (class 0 OID 0)
+-- TOC entry 4947 (class 0 OID 0)
 -- Dependencies: 225
 -- Name: user_task_usertaskid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maxim_pg
 --
@@ -215,7 +217,7 @@ CREATE SEQUENCE public.user_userid_seq
 ALTER SEQUENCE public.user_userid_seq OWNER TO maxim_pg;
 
 --
--- TOC entry 4946 (class 0 OID 0)
+-- TOC entry 4948 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: user_userid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maxim_pg
 --
@@ -233,8 +235,8 @@ CREATE TABLE public.video (
     task_id bigint,
     title character varying(100) NOT NULL,
     url text NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    updated_at timestamp with time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
 
@@ -256,7 +258,7 @@ CREATE SEQUENCE public.video_videoid_seq
 ALTER SEQUENCE public.video_videoid_seq OWNER TO maxim_pg;
 
 --
--- TOC entry 4947 (class 0 OID 0)
+-- TOC entry 4949 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: video_videoid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maxim_pg
 --
@@ -305,7 +307,7 @@ ALTER TABLE ONLY public.video ALTER COLUMN video_id SET DEFAULT nextval('public.
 
 
 --
--- TOC entry 4767 (class 2606 OID 69891)
+-- TOC entry 4769 (class 2606 OID 69891)
 -- Name: point point_pkey; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -314,7 +316,7 @@ ALTER TABLE ONLY public.point
 
 
 --
--- TOC entry 4769 (class 2606 OID 69916)
+-- TOC entry 4771 (class 2606 OID 69916)
 -- Name: point point_task_id_number_key; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -332,7 +334,16 @@ ALTER TABLE ONLY public.task
 
 
 --
--- TOC entry 4778 (class 2606 OID 78119)
+-- TOC entry 4766 (class 2606 OID 94990)
+-- Name: task task_title_key; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
+--
+
+ALTER TABLE ONLY public.task
+    ADD CONSTRAINT task_title_key UNIQUE (title);
+
+
+--
+-- TOC entry 4780 (class 2606 OID 78119)
 -- Name: user user_login_key; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -341,7 +352,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 4780 (class 2606 OID 78117)
+-- TOC entry 4782 (class 2606 OID 78117)
 -- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -350,7 +361,7 @@ ALTER TABLE ONLY public."user"
 
 
 --
--- TOC entry 4782 (class 2606 OID 94695)
+-- TOC entry 4784 (class 2606 OID 94695)
 -- Name: user_task user_task_pkey; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -359,7 +370,7 @@ ALTER TABLE ONLY public.user_task
 
 
 --
--- TOC entry 4784 (class 2606 OID 94699)
+-- TOC entry 4786 (class 2606 OID 94699)
 -- Name: user_task user_task_user_id_task_id_key; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -368,7 +379,7 @@ ALTER TABLE ONLY public.user_task
 
 
 --
--- TOC entry 4772 (class 2606 OID 69900)
+-- TOC entry 4774 (class 2606 OID 69900)
 -- Name: video video_pkey; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -377,7 +388,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- TOC entry 4774 (class 2606 OID 86332)
+-- TOC entry 4776 (class 2606 OID 94988)
 -- Name: video video_task_id_title_key; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -386,7 +397,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- TOC entry 4776 (class 2606 OID 86298)
+-- TOC entry 4778 (class 2606 OID 86298)
 -- Name: video video_url_key; Type: CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -395,7 +406,7 @@ ALTER TABLE ONLY public.video
 
 
 --
--- TOC entry 4765 (class 1259 OID 69906)
+-- TOC entry 4767 (class 1259 OID 69906)
 -- Name: fki_point_task_fkey; Type: INDEX; Schema: public; Owner: maxim_pg
 --
 
@@ -403,7 +414,7 @@ CREATE INDEX fki_point_task_fkey ON public.point USING btree (task_id);
 
 
 --
--- TOC entry 4770 (class 1259 OID 86308)
+-- TOC entry 4772 (class 1259 OID 86308)
 -- Name: fki_video_task_fkey; Type: INDEX; Schema: public; Owner: maxim_pg
 --
 
@@ -411,7 +422,7 @@ CREATE INDEX fki_video_task_fkey ON public.video USING btree (task_id);
 
 
 --
--- TOC entry 4790 (class 2620 OID 86315)
+-- TOC entry 4792 (class 2620 OID 86315)
 -- Name: point before_update_point; Type: TRIGGER; Schema: public; Owner: maxim_pg
 --
 
@@ -419,7 +430,7 @@ CREATE TRIGGER before_update_point BEFORE UPDATE ON public.point FOR EACH ROW EX
 
 
 --
--- TOC entry 4789 (class 2620 OID 86318)
+-- TOC entry 4791 (class 2620 OID 86318)
 -- Name: task before_update_task; Type: TRIGGER; Schema: public; Owner: maxim_pg
 --
 
@@ -427,7 +438,7 @@ CREATE TRIGGER before_update_task BEFORE UPDATE ON public.task FOR EACH ROW EXEC
 
 
 --
--- TOC entry 4792 (class 2620 OID 86321)
+-- TOC entry 4794 (class 2620 OID 86321)
 -- Name: user before_update_user; Type: TRIGGER; Schema: public; Owner: maxim_pg
 --
 
@@ -435,7 +446,7 @@ CREATE TRIGGER before_update_user BEFORE UPDATE ON public."user" FOR EACH ROW EX
 
 
 --
--- TOC entry 4793 (class 2620 OID 86324)
+-- TOC entry 4795 (class 2620 OID 86324)
 -- Name: user_task before_update_user_task; Type: TRIGGER; Schema: public; Owner: maxim_pg
 --
 
@@ -443,7 +454,7 @@ CREATE TRIGGER before_update_user_task BEFORE UPDATE ON public.user_task FOR EAC
 
 
 --
--- TOC entry 4791 (class 2620 OID 86327)
+-- TOC entry 4793 (class 2620 OID 86327)
 -- Name: video before_update_video; Type: TRIGGER; Schema: public; Owner: maxim_pg
 --
 
@@ -451,7 +462,7 @@ CREATE TRIGGER before_update_video BEFORE UPDATE ON public.video FOR EACH ROW EX
 
 
 --
--- TOC entry 4785 (class 2606 OID 69901)
+-- TOC entry 4787 (class 2606 OID 69901)
 -- Name: point point_task_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -460,7 +471,7 @@ ALTER TABLE ONLY public.point
 
 
 --
--- TOC entry 4787 (class 2606 OID 78172)
+-- TOC entry 4789 (class 2606 OID 78172)
 -- Name: user_task user_task_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -469,7 +480,7 @@ ALTER TABLE ONLY public.user_task
 
 
 --
--- TOC entry 4788 (class 2606 OID 78167)
+-- TOC entry 4790 (class 2606 OID 78167)
 -- Name: user_task user_task_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -478,7 +489,7 @@ ALTER TABLE ONLY public.user_task
 
 
 --
--- TOC entry 4786 (class 2606 OID 86303)
+-- TOC entry 4788 (class 2606 OID 86303)
 -- Name: video video_task_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maxim_pg
 --
 
@@ -486,7 +497,7 @@ ALTER TABLE ONLY public.video
     ADD CONSTRAINT video_task_fkey FOREIGN KEY (task_id) REFERENCES public.task(task_id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
--- Completed on 2025-11-14 18:27:23
+-- Completed on 2025-11-29 11:43:32
 
 --
 -- PostgreSQL database dump complete
