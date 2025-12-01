@@ -1,6 +1,5 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
-import com.geo_surveys.geo_surveys_api.dto.entity.VideoEntityDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
