@@ -77,7 +77,8 @@ public class VideoService {
                 .collect(Collectors.toList());
         for (VideoCreateDto createdVideoDto : createdVideoDtos) {
             // Generate unique title.
-            String title = generateUniqueTitle(titles, createdVideoDto.title());
+            String title = generateUniqueTitle(titles,
+                    createdVideoDto.title().trim());
             titles.add(title);
 
             // Create video.
@@ -103,7 +104,7 @@ public class VideoService {
     /**
      *
      * @param titles all videos titles
-     * @param title new title
+     * @param title  new title
      * @return unique title
      */
     private String generateUniqueTitle(List<String> titles, String title) {
