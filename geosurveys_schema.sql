@@ -5,7 +5,7 @@
 -- Dumped from database version 16.4
 -- Dumped by pg_dump version 16.4
 
--- Started on 2025-11-29 11:43:32
+-- Started on 2025-12-05 10:29:41
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -108,11 +108,10 @@ CREATE TABLE public.task (
     task_id bigint NOT NULL,
     title character varying(100) NOT NULL,
     description text,
-    coordinates point,
     latitude numeric,
     longitude numeric,
-    completed boolean NOT NULL,
     report text,
+    completed boolean NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -235,6 +234,8 @@ CREATE TABLE public.video (
     task_id bigint,
     title character varying(100) NOT NULL,
     url text NOT NULL,
+    latitude numeric,
+    longitude numeric,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -497,7 +498,7 @@ ALTER TABLE ONLY public.video
     ADD CONSTRAINT video_task_fkey FOREIGN KEY (task_id) REFERENCES public.task(task_id) ON UPDATE CASCADE ON DELETE SET NULL;
 
 
--- Completed on 2025-11-29 11:43:32
+-- Completed on 2025-12-05 10:29:41
 
 --
 -- PostgreSQL database dump complete
