@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * Entity for user.
@@ -41,6 +42,8 @@ public class User {
             columnDefinition = "timestamp with time zone default now()")
     private Instant updatedAt;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserTask> userTasks;
 }
 
 
