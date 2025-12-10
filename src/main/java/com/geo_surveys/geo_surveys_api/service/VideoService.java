@@ -85,6 +85,8 @@ public class VideoService {
             Video video = new Video();
             video.setTask(task);
             video.setTitle(title);
+            video.setLatitude( createdVideoDto.latitude());
+            video.setLongitude( createdVideoDto.longitude());
 
             // Save in S3.
             String key = String.format(
@@ -135,6 +137,8 @@ public class VideoService {
                 video.getTitle(),
                 video.getUrl(),
                 null,
+                video.getLatitude(),
+                video.getLongitude(),
                 video.getCreatedAt(),
                 video.getUpdatedAt()
         );

@@ -46,7 +46,7 @@ public class S3Service {
             return key;
 
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid video data: " + e.getMessage(), e);
+            throw new IllegalArgumentException("Неправильные данные: " + e.getMessage(), e);
         }
     }
 
@@ -57,12 +57,12 @@ public class S3Service {
      */
     private void validateBase64Video(String base64Video) throws IllegalArgumentException {
         if (base64Video == null || base64Video.trim().isEmpty()) {
-            throw new IllegalArgumentException("Base64 video string is empty");
+            throw new IllegalArgumentException("Видеофайл пуст");
         }
 
         // Basic base64 validation
         if (!base64Video.matches("^[A-Za-z0-9+/]*={0,2}$")) {
-            throw new IllegalArgumentException("Invalid base64 format");
+            throw new IllegalArgumentException("Неправильный формат base64");
         }
     }
 
@@ -75,7 +75,7 @@ public class S3Service {
         try {
             return Base64.getDecoder().decode(base64Video);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid base64 encoding", e);
+            throw new IllegalArgumentException("Неправильная кодировка base64", e);
         }
     }
 

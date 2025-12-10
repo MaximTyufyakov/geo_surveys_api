@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 /**
@@ -37,6 +38,14 @@ public class Video {
     @Column(name = "url", nullable = false, unique = true)
     @Setter
     private String url;
+
+    @Column(name = "latitude", nullable = false)
+    @Setter
+    private BigDecimal latitude;
+
+    @Column(name = "longitude", nullable = false)
+    @Setter
+    private BigDecimal longitude;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false,

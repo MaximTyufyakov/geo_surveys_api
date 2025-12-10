@@ -2,6 +2,7 @@ package com.geo_surveys.geo_surveys_api.dto.entity;
 
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 /**
@@ -22,6 +23,12 @@ public record VideoEntityDto(
 
         String url,
         String file,
+
+        @NotNull(message = "Широта не может быть пустой")
+        BigDecimal latitude,
+
+        @NotNull(message = "Долгота не может быть пустой")
+        BigDecimal longitude,
 
         @NotNull(message = "Отсутствует поле created_at")
         Instant created_at,
