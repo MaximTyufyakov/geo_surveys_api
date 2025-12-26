@@ -59,7 +59,9 @@ public class TaskController {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(taskService.getOne(userId, taskId));
+                    .body(Map.ofEntries(
+                            Map.entry("task", taskService.getOne(userId, taskId))
+                    ));
         } catch (AccessDeniedException e) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -91,7 +93,9 @@ public class TaskController {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(taskService.update(userId, taskUpdateDto));
+                    .body(Map.ofEntries(
+                            Map.entry("task", taskService.update(userId, taskUpdateDto))
+                    ));
         } catch (AccessDeniedException e) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)

@@ -1,5 +1,6 @@
 package com.geo_surveys.geo_surveys_api.dto.entity;
 
+import com.geo_surveys.geo_surveys_api.dto.update.PointUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 /**
  * DTO for task entity (response for synchronization and request).
@@ -36,6 +38,12 @@ public record TaskEntityDto(
         Instant created_at,
 
         @NotNull(message = "Отсутствует поле updated_at")
-        Instant updated_at
+        Instant updated_at,
+
+        @NotNull(message = "Отсутствует поле points")
+        List<PointEntityDto> points,
+
+        @NotNull(message = "Отсутствует поле videos")
+        List<VideoEntityDto> videos
 ) {
 }

@@ -67,7 +67,7 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if entity not found.
      */
-    public Map<String, Object> getOne(Long userId, Long taskId)
+    public TaskEntityDto getOne(Long userId, Long taskId)
             throws AccessDeniedException, EntityNotFoundException {
         // Check relation.
         if (userTaskService.existRelation(userId, taskId)) {
@@ -75,7 +75,7 @@ public class TaskService {
 
             // Check task exist.
             if (task != null) {
-                return convertToMap(task);
+                return convertToDto(task);
             } else {
                 throw new EntityNotFoundException("Задание не найдено");
             }
@@ -93,7 +93,7 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if task not found.
      */
-    public Map<String, Object> update(Long userId, TaskUpdateDto taskUpdateDto)
+    public TaskEntityDto update(Long userId, TaskUpdateDto taskUpdateDto)
             throws AccessDeniedException, EntityNotFoundException {
         // Check user-task relation.
         if (userTaskService.existRelation(userId, taskUpdateDto.task_id())) {
@@ -129,7 +129,7 @@ public class TaskService {
                 // Task update.
                 task.setCompleted(completed);
                 task.setReport(taskUpdateDto.report());
-                return convertToMap(taskRepo.save(task));
+                return convertToDto(taskRepo.save(task));
 
             } else {
                 throw new EntityNotFoundException("Задание не найдено");
@@ -138,26 +138,6 @@ public class TaskService {
             throw new AccessDeniedException("Нет доступа");
         }
 
-    }
-
-    /**
-     * Parse task entity with points and videos to map with dto;
-     *
-     * @param task is target entity.
-     * @return map with dto.
-     */
-    private Map<String, Object> convertToMap(Task task) {
-        TaskEntityDto taskDto = convertToDto(task);
-        List<PointEntityDto> pointsDto =
-                pointService.convertToDtoList(task.getPoints());
-        List<VideoEntityDto> videosDto =
-                videoService.convertToDtoList(task.getVideos());
-
-        return Map.ofEntries(
-                Map.entry("task", taskDto),
-                Map.entry("points", pointsDto),
-                Map.entry("videos", videosDto)
-        );
     }
 
     /**
@@ -176,7 +156,9 @@ public class TaskService {
                 task.getCompleted(),
                 task.getReport(),
                 task.getCreatedAt(),
-                task.getUpdatedAt()
+                task.getUpdatedAt(),
+                pointService.convertToDtoList(task.getPoints()),
+                videoService.convertToDtoList(task.getVideos())
         );
     }
 
