@@ -1,30 +1,32 @@
-package com.geo_surveys.geo_surveys_api.dto.update;
+package com.geo_surveys.geo_surveys_api.dto.request;
 
-import com.geo_surveys.geo_surveys_api.dto.create.VideoCreateDto;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.util.List;
 
 /**
- * DTO for task update (request).
+ * DTO for task update.
  */
-public record TaskUpdateDto(
-
+@Getter
+public class TaskUpdateRequestDto{
         @NotNull(message = "Отстутсвует поле task_id")
         @Min(value = 1, message = "task_id должно быть больше 0")
-        Long task_id,
+        Long task_id;
 
+        @Valid
         @NotNull(message = "Отстутсвует поле updatedPoints")
-        List<PointUpdateDto> updatedPoints,
+        List<PointUpdateRequestDto> updatedPoints;
 
-        String report,
+        String report;
 
+        @Valid
         @NotNull(message = "Отстутсвует поле createdVideos")
-        List<VideoCreateDto> createdVideos,
+        List<VideoCreateRequestDto> createdVideos;
 
         @NotNull(message = "Отстутсвует поле deletedVideos")
-        List<Long> deletedVideos
-) {
+        List<Long> deletedVideos;
 
 }

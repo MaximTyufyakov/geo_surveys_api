@@ -1,30 +1,29 @@
-package com.geo_surveys.geo_surveys_api.dto.create;
+package com.geo_surveys.geo_surveys_api.dto.request;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 
 /**
- * DTO for video create (request).
+ * DTO for video create.
  */
-public record VideoCreateDto(
-
+@Getter
+public class VideoCreateRequestDto{
         @NotBlank(message = "Название не может быть пустым")
-        String title,
+        String title;
 
         @NotBlank(message = "Файл не может быть пустым")
-        String file, // Base64 encoded video
+        String file; // Base64 encoded video
 
         @NotBlank(message = "Формат не может быть пустым")
-        String format,
+        String format;
 
         @NotNull(message = "Широта не может быть пустой")
-        BigDecimal latitude,
+        BigDecimal latitude;
 
         @NotNull(message = "Долгота не может быть пустой")
-        BigDecimal longitude
-) {
+        BigDecimal longitude;
 
 }

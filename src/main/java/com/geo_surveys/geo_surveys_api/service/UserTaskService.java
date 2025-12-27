@@ -1,6 +1,6 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.entity.UserTaskEntityDto;
+import com.geo_surveys.geo_surveys_api.dto.response.UserTaskEntityResponseDto;
 import com.geo_surveys.geo_surveys_api.entity.UserTask;
 import com.geo_surveys.geo_surveys_api.repository.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class UserTaskService {
      * @param userTask the Task entity
      * @return TaskDto
      */
-    public UserTaskEntityDto convertToDto(UserTask userTask) {
-        return new UserTaskEntityDto(
+    public UserTaskEntityResponseDto convertToDto(UserTask userTask) {
+        return new UserTaskEntityResponseDto(
                 userTask.getUserTaskId(),
                 userTask.getUser().getUserId(),
                 userTask.getTask().getTaskId(),
@@ -55,7 +55,7 @@ public class UserTaskService {
      * @param userTasks list of UserTask entities
      * @return list of UserTaskEntityDto
      */
-    public List<UserTaskEntityDto> convertToDtoList(List<UserTask> userTasks) {
+    public List<UserTaskEntityResponseDto> convertToDtoList(List<UserTask> userTasks) {
         return userTasks.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

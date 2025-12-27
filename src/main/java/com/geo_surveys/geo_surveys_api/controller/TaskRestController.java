@@ -1,7 +1,7 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
-import com.geo_surveys.geo_surveys_api.dto.entity.TaskEntityDto;
-import com.geo_surveys.geo_surveys_api.dto.update.TaskUpdateDto;
+import com.geo_surveys.geo_surveys_api.dto.response.TaskEntityResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.service.TaskService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/tasks")
-public class TaskController {
+public class TaskRestController {
 
     /**
      * Task service.
@@ -35,7 +35,7 @@ public class TaskController {
      * @return list of tasks.
      */
     @GetMapping("/all")
-    public ResponseEntity<Map<String, List<TaskEntityDto>>> getAll(Authentication authentication) {
+    public ResponseEntity<Map<String, List<TaskEntityResponseDto>>> getAll(Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -82,19 +82,19 @@ public class TaskController {
      * Update task with points and videos.
      *
      * @param authentication is authentication data.
-     * @param taskUpdateDto is updated data.
+     * @param taskUpdateRequestDto is updated data.
      * @return map: actual task, points, videos.
      */
     @PutMapping("/save")
     public ResponseEntity<Map<String, Object>> update(
             Authentication authentication,
-            @Valid @RequestBody TaskUpdateDto taskUpdateDto) {
+            @Valid @RequestBody TaskUpdateRequestDto taskUpdateRequestDto) {
         Long userId = (Long) authentication.getPrincipal();
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(Map.ofEntries(
-                            Map.entry("task", taskService.update(userId, taskUpdateDto))
+                            Map.entry("task", taskService.update(userId, taskUpdateRequestDto))
                     ));
         } catch (AccessDeniedException e) {
             return ResponseEntity

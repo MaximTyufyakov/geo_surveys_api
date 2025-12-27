@@ -1,9 +1,7 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.entity.PointEntityDto;
-import com.geo_surveys.geo_surveys_api.dto.entity.TaskEntityDto;
-import com.geo_surveys.geo_surveys_api.dto.entity.VideoEntityDto;
-import com.geo_surveys.geo_surveys_api.dto.update.TaskUpdateDto;
+import com.geo_surveys.geo_surveys_api.dto.response.TaskEntityResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.entity.Task;
 import com.geo_surveys.geo_surveys_api.entity.Video;
@@ -14,7 +12,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -54,7 +51,7 @@ public class TaskService {
      * @param userId is user id
      * @return list of tasks.
      */
-    public List<TaskEntityDto> getAll(Long userId) {
+    public List<TaskEntityResponseDto> getAll(Long userId) {
         return convertToDtoList(taskRepo.findAllByUserId(userId));
     }
 
@@ -67,7 +64,7 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if entity not found.
      */
-    public TaskEntityDto getOne(Long userId, Long taskId)
+    public TaskEntityResponseDto getOne(Long userId, Long taskId)
             throws AccessDeniedException, EntityNotFoundException {
         // Check relation.
         if (userTaskService.existRelation(userId, taskId)) {
@@ -88,16 +85,16 @@ public class TaskService {
      * Update task.
      *
      * @param userId        is user id
-     * @param taskUpdateDto is new data
+     * @param taskUpdateRequestDto is new data
      * @return map of task, points and videos.
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if task not found.
      */
-    public TaskEntityDto update(Long userId, TaskUpdateDto taskUpdateDto)
+    public TaskEntityResponseDto update(Long userId, TaskUpdateRequestDto taskUpdateRequestDto)
             throws AccessDeniedException, EntityNotFoundException {
         // Check user-task relation.
-        if (userTaskService.existRelation(userId, taskUpdateDto.task_id())) {
-            Task task = taskRepo.findById(taskUpdateDto.task_id()).orElse(null);
+        if (userTaskService.existRelation(userId, taskUpdateRequestDto.getTask_id())) {
+            Task task = taskRepo.findById(taskUpdateRequestDto.getTask_id()).orElse(null);
 
             // Check task exist.
             if (task != null) {
@@ -105,21 +102,21 @@ public class TaskService {
                 List<Point> points = task.getPoints();
                 pointService.updateList(
                         points,
-                        taskUpdateDto.updatedPoints()
+                        taskUpdateRequestDto.getUpdatedPoints()
                 );
 
                 // Videos delete.
                 List<Video> videos = task.getVideos();
                 videoService.deleteList(
                         videos,
-                        taskUpdateDto.deletedVideos()
+                        taskUpdateRequestDto.getDeletedVideos()
                 );
 
                 // Videos create.
                 videoService.createList(
                         task,
                         videos,
-                        taskUpdateDto.createdVideos()
+                        taskUpdateRequestDto.getCreatedVideos()
                 );
 
                 // Completed check.
@@ -128,7 +125,7 @@ public class TaskService {
 
                 // Task update.
                 task.setCompleted(completed);
-                task.setReport(taskUpdateDto.report());
+                task.setReport(taskUpdateRequestDto.getReport());
                 return convertToDto(taskRepo.save(task));
 
             } else {
@@ -146,8 +143,8 @@ public class TaskService {
      * @param task the Task entity
      * @return TaskDto
      */
-    public TaskEntityDto convertToDto(Task task) {
-        return new TaskEntityDto(
+    public TaskEntityResponseDto convertToDto(Task task) {
+        return new TaskEntityResponseDto(
                 task.getTaskId(),
                 task.getTitle(),
                 task.getDescription(),
@@ -168,7 +165,7 @@ public class TaskService {
      * @param tasks list of Task entities
      * @return list of TaskEntityDto
      */
-    public List<TaskEntityDto> convertToDtoList(List<Task> tasks) {
+    public List<TaskEntityResponseDto> convertToDtoList(List<Task> tasks) {
         return tasks.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

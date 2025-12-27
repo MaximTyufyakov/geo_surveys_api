@@ -1,13 +1,12 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.entity.PointEntityDto;
-import com.geo_surveys.geo_surveys_api.dto.update.PointUpdateDto;
+import com.geo_surveys.geo_surveys_api.dto.response.PointEntityResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.request.PointUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -30,18 +29,18 @@ public class PointService {
      * Update point list by data in dto.
      *
      * @param points          is target points.
-     * @param pointUpdateDtos is new data.
+     * @param pointUpdateRequestDtos is new data.
      */
-    public void updateList(List<Point> points, List<PointUpdateDto> pointUpdateDtos) {
+    public void updateList(List<Point> points, List<PointUpdateRequestDto> pointUpdateRequestDtos) {
         // Map for get point by id.
         Map<Long, Point> pointMap = points.stream()
                 .collect(Collectors.toMap(Point::getPointId, Function.identity()));
         // Update.
-        for (PointUpdateDto pointUpdateDto : pointUpdateDtos) {
-            Point point = pointMap.get(pointUpdateDto.point_id());
+        for (PointUpdateRequestDto pointUpdateRequestDto : pointUpdateRequestDtos) {
+            Point point = pointMap.get(pointUpdateRequestDto.getPoint_id());
             // Point exist.
             if (point != null) {
-                update(point, pointUpdateDto);
+                update(point, pointUpdateRequestDto);
             }
         }
     }
@@ -50,11 +49,11 @@ public class PointService {
      * Update point by data in dto.
      *
      * @param point          is target point.
-     * @param pointUpdateDto is new data.
+     * @param pointUpdateRequestDto is new data.
      */
-    private void update(Point point, PointUpdateDto pointUpdateDto) {
+    private void update(Point point, PointUpdateRequestDto pointUpdateRequestDto) {
         // Point update.
-        point.setCompleted(pointUpdateDto.completed());
+        point.setCompleted(pointUpdateRequestDto.getCompleted());
         pointRepo.save(point);
     }
 
@@ -79,8 +78,8 @@ public class PointService {
      * @param point the Task entity
      * @return TaskDto
      */
-    public PointEntityDto convertToDto(Point point) {
-        return new PointEntityDto(
+    public PointEntityResponseDto convertToDto(Point point) {
+        return new PointEntityResponseDto(
                 point.getPointId(),
                 point.getTask().getTaskId(),
                 point.getNumber(),
@@ -97,7 +96,7 @@ public class PointService {
      * @param points list of Point entities
      * @return list of PointEntityDto
      */
-    public List<PointEntityDto> convertToDtoList(List<Point> points) {
+    public List<PointEntityResponseDto> convertToDtoList(List<Point> points) {
         return points.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

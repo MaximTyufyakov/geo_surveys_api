@@ -1,15 +1,13 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.create.VideoCreateDto;
-import com.geo_surveys.geo_surveys_api.dto.entity.VideoEntityDto;
-import com.geo_surveys.geo_surveys_api.dto.update.PointUpdateDto;
+import com.geo_surveys.geo_surveys_api.dto.request.VideoCreateRequestDto;
+import com.geo_surveys.geo_surveys_api.dto.response.VideoEntityResponseDto;
 import com.geo_surveys.geo_surveys_api.entity.Task;
 import com.geo_surveys.geo_surveys_api.entity.Video;
 import com.geo_surveys.geo_surveys_api.repository.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -70,32 +68,32 @@ public class VideoService {
     public void createList(
             Task task,
             List<Video> videos,
-            List<VideoCreateDto> createdVideoDtos) throws IllegalArgumentException {
+            List<VideoCreateRequestDto> createdVideoDtos) throws IllegalArgumentException {
         // All titles.
         List<String> titles = videos.stream()
                 .map(Video::getTitle)
                 .collect(Collectors.toList());
-        for (VideoCreateDto createdVideoDto : createdVideoDtos) {
+        for (VideoCreateRequestDto createdVideoDto : createdVideoDtos) {
             // Generate unique title.
             String title = generateUniqueTitle(titles,
-                    createdVideoDto.title().trim());
+                    createdVideoDto.getTitle().trim());
             titles.add(title);
 
             // Create video.
             Video video = new Video();
             video.setTask(task);
             video.setTitle(title);
-            video.setLatitude( createdVideoDto.latitude());
-            video.setLongitude( createdVideoDto.longitude());
+            video.setLatitude( createdVideoDto.getLatitude());
+            video.setLongitude( createdVideoDto.getLongitude());
 
             // Save in S3.
             String key = String.format(
                     "%s/%s.%s",
                     task.getTitle(),
                     title,
-                    createdVideoDto.format()
+                    createdVideoDto.getFormat()
             );
-            String url = s3Service.uploadVideo(createdVideoDto.file(), key, createdVideoDto.format());
+            String url = s3Service.uploadVideo(createdVideoDto.getFile(), key, createdVideoDto.getFormat());
             video.setUrl(url);
 
             // Save in db and add in list.
@@ -130,8 +128,8 @@ public class VideoService {
      * @param video the Task entity
      * @return TaskDto
      */
-    public VideoEntityDto convertToDto(Video video) {
-        return new VideoEntityDto(
+    public VideoEntityResponseDto convertToDto(Video video) {
+        return new VideoEntityResponseDto(
                 video.getVideoId(),
                 video.getTask().getTaskId(),
                 video.getTitle(),
@@ -150,7 +148,7 @@ public class VideoService {
      * @param videos list of Video entities
      * @return list of VideoEntityDto
      */
-    public List<VideoEntityDto> convertToDtoList(List<Video> videos) {
+    public List<VideoEntityResponseDto> convertToDtoList(List<Video> videos) {
         return videos.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
