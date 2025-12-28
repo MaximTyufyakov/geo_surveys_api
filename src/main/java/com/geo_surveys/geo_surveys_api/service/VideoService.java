@@ -128,7 +128,7 @@ public class VideoService {
      * @param video the Task entity
      * @return TaskDto
      */
-    public VideoResponseDto convertToDto(Video video) {
+    public VideoResponseDto toDto(Video video) {
         return new VideoResponseDto(
                 video.getVideoId(),
                 video.getTitle(),
@@ -143,9 +143,9 @@ public class VideoService {
      * @param videos list of Video entities
      * @return list of VideoEntityDto
      */
-    public List<VideoResponseDto> convertToDtoList(List<Video> videos) {
+    public List<VideoResponseDto> toDtoList(List<Video> videos) {
         return videos.stream()
-                .map(this::convertToDto)
+                .map(this::toDto)
                 .collect(Collectors.toList());
 
     }

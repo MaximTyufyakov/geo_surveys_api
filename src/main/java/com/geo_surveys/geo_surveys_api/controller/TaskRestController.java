@@ -1,5 +1,6 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
+import com.geo_surveys.geo_surveys_api.dto.response.MessageResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.response.TaskResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.service.TaskService;
@@ -35,13 +36,11 @@ public class TaskRestController {
      * @return list of tasks.
      */
     @GetMapping("/all")
-    public ResponseEntity<Map<String, List<TaskResponseDto>>> getAll(Authentication authentication) {
+    public ResponseEntity<List<TaskResponseDto>> getAll(Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Map.ofEntries(
-                        Map.entry("tasks", taskService.getAll(userId))
-                ));
+                .body(taskService.getAll(userId));
 
     }
 
@@ -53,28 +52,22 @@ public class TaskRestController {
      * @return map: task, points, videos.
      */
     @GetMapping("/{taskId}")
-    public ResponseEntity<Map<String, Object>> getOne(
+    public ResponseEntity<Object> getOne(
             Authentication authentication, @PathVariable Long taskId) {
         Long userId = (Long) authentication.getPrincipal();
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(Map.ofEntries(
-                            Map.entry("task", taskService.getOne(userId, taskId))
-                    ));
+                    .body(taskService.getOne(userId, taskId));
         } catch (AccessDeniedException e) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body(Map.ofEntries(
-                            Map.entry("message", e.getMessage())
-                    ));
+                    .body(new MessageResponseDto(e.getMessage()));
         }
         catch (EntityNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(Map.ofEntries(
-                            Map.entry("message", e.getMessage())
-                    ));
+                    .body(new MessageResponseDto(e.getMessage()));
         }
     }
 
@@ -86,29 +79,23 @@ public class TaskRestController {
      * @return map: actual task, points, videos.
      */
     @PutMapping("/save")
-    public ResponseEntity<Map<String, Object>> update(
+    public ResponseEntity<Object> update(
             Authentication authentication,
             @Valid @RequestBody TaskUpdateRequestDto taskUpdateRequestDto) {
         Long userId = (Long) authentication.getPrincipal();
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(Map.ofEntries(
-                            Map.entry("task", taskService.update(userId, taskUpdateRequestDto))
-                    ));
+                    .body(taskService.update(userId, taskUpdateRequestDto));
         } catch (AccessDeniedException e) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body(Map.ofEntries(
-                            Map.entry("message", e.getMessage())
-                    ));
+                    .body(new MessageResponseDto(e.getMessage()));
         }
         catch (EntityNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(Map.ofEntries(
-                            Map.entry("message", e.getMessage())
-                    ));
+                    .body(new MessageResponseDto(e.getMessage()));
         }
     }
 }

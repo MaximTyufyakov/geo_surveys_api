@@ -78,7 +78,7 @@ public class PointService {
      * @param point the Task entity
      * @return TaskDto
      */
-    public PointResponseDto convertToDto(Point point) {
+    public PointResponseDto toDto(Point point) {
         return new PointResponseDto(
                 point.getPointId(),
                 point.getNumber(),
@@ -93,9 +93,9 @@ public class PointService {
      * @param points list of Point entities
      * @return list of PointEntityDto
      */
-    public List<PointResponseDto> convertToDtoList(List<Point> points) {
+    public List<PointResponseDto> toDtoList(List<Point> points) {
         return points.stream()
-                .map(this::convertToDto)
+                .map(this::toDto)
                 .collect(Collectors.toList());
 
     }

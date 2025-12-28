@@ -1,5 +1,6 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
+import com.geo_surveys.geo_surveys_api.dto.response.MessageResponseDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,16 +29,17 @@ public class UserRestController {
      * @return token.
      */
     @PostMapping("/auth")
-    public ResponseEntity<Map<String, String>> auth(@Valid @RequestBody TokenCreateRequestDto tokenCreateRequestDto) {
+    public ResponseEntity<Object> auth(@Valid @RequestBody TokenCreateRequestDto tokenCreateRequestDto) {
         try {
-            String token = userService.auth(tokenCreateRequestDto.getLogin(), tokenCreateRequestDto.getPassword());
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.ofEntries(
-                    Map.entry("token", token)
-            ));
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(userService.auth(
+                            tokenCreateRequestDto.getLogin(),
+                            tokenCreateRequestDto.getPassword()));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.ofEntries(
-                    Map.entry("message", e.getMessage())
-            ));
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new MessageResponseDto(e.getMessage()));
         }
     }
 

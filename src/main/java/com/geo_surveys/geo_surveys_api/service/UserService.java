@@ -1,5 +1,6 @@
 package com.geo_surveys.geo_surveys_api.service;
 
+import com.geo_surveys.geo_surveys_api.dto.response.TokenResponseDto;
 import com.geo_surveys.geo_surveys_api.entity.User;
 import com.geo_surveys.geo_surveys_api.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -49,10 +50,10 @@ public class UserService {
      * @return token.
      * @throws AuthenticationException if authentication failed.
      */
-    public String auth(String login, String password) throws AuthenticationException {
+    public TokenResponseDto auth(String login, String password) throws AuthenticationException {
         User user = userRepo.findByLogin(login);
         if (user != null && checkPassword(password, user.getPassword())) {
-            return generateToken(user.getUserId());
+            return new TokenResponseDto(generateToken(user.getUserId()));
         } else {
             throw new AuthenticationException("Неверные учетные данные");
         }

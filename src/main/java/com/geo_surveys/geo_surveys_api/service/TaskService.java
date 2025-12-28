@@ -52,7 +52,7 @@ public class TaskService {
      * @return list of tasks.
      */
     public List<TaskResponseDto> getAll(Long userId) {
-        return convertToDtoList(taskRepo.findAllByUserId(userId));
+        return toDtoList(taskRepo.findAllByUserId(userId));
     }
 
     /**
@@ -72,7 +72,7 @@ public class TaskService {
 
             // Check task exist.
             if (task != null) {
-                return convertToDto(task);
+                return toDto(task);
             } else {
                 throw new EntityNotFoundException("Задание не найдено");
             }
@@ -126,7 +126,7 @@ public class TaskService {
                 // Task update.
                 task.setCompleted(completed);
                 task.setReport(taskUpdateRequestDto.getReport());
-                return convertToDto(taskRepo.save(task));
+                return toDto(taskRepo.save(task));
 
             } else {
                 throw new EntityNotFoundException("Задание не найдено");
@@ -143,7 +143,7 @@ public class TaskService {
      * @param task the Task entity
      * @return TaskDto
      */
-    public TaskResponseDto convertToDto(Task task) {
+    public TaskResponseDto toDto(Task task) {
         return new TaskResponseDto(
                 task.getTaskId(),
                 task.getTitle(),
@@ -152,8 +152,8 @@ public class TaskService {
                 task.getLongitude(),
                 task.getCompleted(),
                 task.getReport(),
-                pointService.convertToDtoList(task.getPoints()),
-                videoService.convertToDtoList(task.getVideos())
+                pointService.toDtoList(task.getPoints()),
+                videoService.toDtoList(task.getVideos())
         );
     }
 
@@ -163,9 +163,9 @@ public class TaskService {
      * @param tasks list of Task entities
      * @return list of TaskEntityDto
      */
-    public List<TaskResponseDto> convertToDtoList(List<Task> tasks) {
+    public List<TaskResponseDto> toDtoList(List<Task> tasks) {
         return tasks.stream()
-                .map(this::convertToDto)
+                .map(this::toDto)
                 .collect(Collectors.toList());
 
     }
