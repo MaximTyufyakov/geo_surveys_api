@@ -1,6 +1,6 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
-import com.geo_surveys.geo_surveys_api.dto.response.TaskEntityResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.response.TaskResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.service.TaskService;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,7 +35,7 @@ public class TaskRestController {
      * @return list of tasks.
      */
     @GetMapping("/all")
-    public ResponseEntity<Map<String, List<TaskEntityResponseDto>>> getAll(Authentication authentication) {
+    public ResponseEntity<Map<String, List<TaskResponseDto>>> getAll(Authentication authentication) {
         Long userId = (Long) authentication.getPrincipal();
         return ResponseEntity
                 .status(HttpStatus.OK)

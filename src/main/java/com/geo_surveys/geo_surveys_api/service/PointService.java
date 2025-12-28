@@ -1,6 +1,6 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.response.PointEntityResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.response.PointResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.PointUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.repository.PointRepository;
@@ -37,7 +37,7 @@ public class PointService {
                 .collect(Collectors.toMap(Point::getPointId, Function.identity()));
         // Update.
         for (PointUpdateRequestDto pointUpdateRequestDto : pointUpdateRequestDtos) {
-            Point point = pointMap.get(pointUpdateRequestDto.getPoint_id());
+            Point point = pointMap.get(pointUpdateRequestDto.getPointId());
             // Point exist.
             if (point != null) {
                 update(point, pointUpdateRequestDto);
@@ -78,15 +78,12 @@ public class PointService {
      * @param point the Task entity
      * @return TaskDto
      */
-    public PointEntityResponseDto convertToDto(Point point) {
-        return new PointEntityResponseDto(
+    public PointResponseDto convertToDto(Point point) {
+        return new PointResponseDto(
                 point.getPointId(),
-                point.getTask().getTaskId(),
                 point.getNumber(),
                 point.getDescription(),
-                point.getCompleted(),
-                point.getCreatedAt(),
-                point.getUpdatedAt()
+                point.getCompleted()
         );
     }
 
@@ -96,7 +93,7 @@ public class PointService {
      * @param points list of Point entities
      * @return list of PointEntityDto
      */
-    public List<PointEntityResponseDto> convertToDtoList(List<Point> points) {
+    public List<PointResponseDto> convertToDtoList(List<Point> points) {
         return points.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

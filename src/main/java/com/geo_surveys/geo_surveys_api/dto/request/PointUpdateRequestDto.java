@@ -9,11 +9,11 @@ import lombok.Getter;
  */
 @Getter
 public class PointUpdateRequestDto{
-        @NotNull(message = "Отстутсвует поле point_id")
-        @Min(value = 1, message = "point_id должно быть больше 0")
-        Long point_id;
+        @NotNull(message = "Отстутсвует поле pointId")
+        @Min(value = 1, message = "pointId должно быть больше 0")
+        Long pointId;
 
         @NotNull(message = "Отстутсвует поле completed")
         Boolean completed;
-        
+
 }

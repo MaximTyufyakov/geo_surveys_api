@@ -1,6 +1,6 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.response.TaskEntityResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.response.TaskResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.entity.Task;
@@ -51,7 +51,7 @@ public class TaskService {
      * @param userId is user id
      * @return list of tasks.
      */
-    public List<TaskEntityResponseDto> getAll(Long userId) {
+    public List<TaskResponseDto> getAll(Long userId) {
         return convertToDtoList(taskRepo.findAllByUserId(userId));
     }
 
@@ -64,7 +64,7 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if entity not found.
      */
-    public TaskEntityResponseDto getOne(Long userId, Long taskId)
+    public TaskResponseDto getOne(Long userId, Long taskId)
             throws AccessDeniedException, EntityNotFoundException {
         // Check relation.
         if (userTaskService.existRelation(userId, taskId)) {
@@ -90,11 +90,11 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if task not found.
      */
-    public TaskEntityResponseDto update(Long userId, TaskUpdateRequestDto taskUpdateRequestDto)
+    public TaskResponseDto update(Long userId, TaskUpdateRequestDto taskUpdateRequestDto)
             throws AccessDeniedException, EntityNotFoundException {
         // Check user-task relation.
-        if (userTaskService.existRelation(userId, taskUpdateRequestDto.getTask_id())) {
-            Task task = taskRepo.findById(taskUpdateRequestDto.getTask_id()).orElse(null);
+        if (userTaskService.existRelation(userId, taskUpdateRequestDto.getTaskId())) {
+            Task task = taskRepo.findById(taskUpdateRequestDto.getTaskId()).orElse(null);
 
             // Check task exist.
             if (task != null) {
@@ -109,7 +109,7 @@ public class TaskService {
                 List<Video> videos = task.getVideos();
                 videoService.deleteList(
                         videos,
-                        taskUpdateRequestDto.getDeletedVideos()
+                        taskUpdateRequestDto.getDeletedVideosId()
                 );
 
                 // Videos create.
@@ -143,8 +143,8 @@ public class TaskService {
      * @param task the Task entity
      * @return TaskDto
      */
-    public TaskEntityResponseDto convertToDto(Task task) {
-        return new TaskEntityResponseDto(
+    public TaskResponseDto convertToDto(Task task) {
+        return new TaskResponseDto(
                 task.getTaskId(),
                 task.getTitle(),
                 task.getDescription(),
@@ -152,8 +152,6 @@ public class TaskService {
                 task.getLongitude(),
                 task.getCompleted(),
                 task.getReport(),
-                task.getCreatedAt(),
-                task.getUpdatedAt(),
                 pointService.convertToDtoList(task.getPoints()),
                 videoService.convertToDtoList(task.getVideos())
         );
@@ -165,7 +163,7 @@ public class TaskService {
      * @param tasks list of Task entities
      * @return list of TaskEntityDto
      */
-    public List<TaskEntityResponseDto> convertToDtoList(List<Task> tasks) {
+    public List<TaskResponseDto> convertToDtoList(List<Task> tasks) {
         return tasks.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

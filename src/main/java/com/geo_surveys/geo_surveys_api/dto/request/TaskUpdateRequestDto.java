@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Getter
 public class TaskUpdateRequestDto{
-        @NotNull(message = "Отстутсвует поле task_id")
-        @Min(value = 1, message = "task_id должно быть больше 0")
-        Long task_id;
+        @NotNull(message = "Отстутсвует поле taskId")
+        @Min(value = 1, message = "taskId должно быть больше 0")
+        Long taskId;
 
         @Valid
         @NotNull(message = "Отстутсвует поле updatedPoints")
@@ -26,7 +26,7 @@ public class TaskUpdateRequestDto{
         @NotNull(message = "Отстутсвует поле createdVideos")
         List<VideoCreateRequestDto> createdVideos;
 
-        @NotNull(message = "Отстутсвует поле deletedVideos")
-        List<Long> deletedVideos;
+        @NotNull(message = "Отстутсвует поле deletedVideosId")
+        List<Long> deletedVideosId;
 
 }
