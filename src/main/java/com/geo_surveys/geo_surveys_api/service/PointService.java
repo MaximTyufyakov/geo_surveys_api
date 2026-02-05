@@ -1,6 +1,5 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.response.PointResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.PointUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.repository.PointRepository;
@@ -72,33 +71,7 @@ public class PointService {
         return true;
     }
 
-    /**
-     * Convert Point entity to PointDto
-     *
-     * @param point the Task entity
-     * @return TaskDto
-     */
-    public PointResponseDto toDto(Point point) {
-        return new PointResponseDto(
-                point.getPointId(),
-                point.getNumber(),
-                point.getDescription(),
-                point.getCompleted()
-        );
-    }
 
-    /**
-     * Convert list of Point entities to list of PointEntityDto
-     *
-     * @param points list of Point entities
-     * @return list of PointEntityDto
-     */
-    public List<PointResponseDto> toDtoList(List<Point> points) {
-        return points.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-
-    }
 
 }
 

@@ -1,8 +1,13 @@
 package com.geo_surveys.geo_surveys_api.controller;
 
 import com.geo_surveys.geo_surveys_api.dto.response.MessageResponseDto;
+import com.geo_surveys.geo_surveys_api.dto.response.PointResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.response.TaskResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
+import com.geo_surveys.geo_surveys_api.dto.response.VideoResponseDto;
+import com.geo_surveys.geo_surveys_api.entity.Point;
+import com.geo_surveys.geo_surveys_api.entity.Task;
+import com.geo_surveys.geo_surveys_api.entity.Video;
 import com.geo_surveys.geo_surveys_api.service.TaskService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -14,7 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller for work with task.
@@ -40,7 +45,7 @@ public class TaskRestController {
         Long userId = (Long) authentication.getPrincipal();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(taskService.getAll(userId));
+                .body(tasksToDtoList(taskService.getAll(userId)));
 
     }
 
@@ -58,7 +63,7 @@ public class TaskRestController {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(taskService.getOne(userId, taskId));
+                    .body(taskToDto(taskService.getOne(userId, taskId)));
         } catch (AccessDeniedException e) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -86,7 +91,7 @@ public class TaskRestController {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(taskService.update(userId, taskUpdateRequestDto));
+                    .body(taskToDto(taskService.update(userId, taskUpdateRequestDto)));
         } catch (AccessDeniedException e) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -97,5 +102,94 @@ public class TaskRestController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(new MessageResponseDto(e.getMessage()));
         }
+    }
+
+    /**
+     * Convert Task entity to TaskDto
+     *
+     * @param task the Task entity
+     * @return TaskDto
+     */
+    public TaskResponseDto taskToDto(Task task) {
+        return new TaskResponseDto(
+                task.getTaskId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getLatitude(),
+                task.getLongitude(),
+                task.getCompleted(),
+                task.getReport(),
+                pointsToDtoList(task.getPoints()),
+                videosToDtoList(task.getVideos())
+        );
+    }
+
+    /**
+     * Convert list of Task entities to list of TaskEntityDto
+     *
+     * @param tasks list of Task entities
+     * @return list of TaskEntityDto
+     */
+    public List<TaskResponseDto> tasksToDtoList(List<Task> tasks) {
+        return tasks.stream()
+                .map(this::taskToDto)
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Convert Point entity to PointDto
+     *
+     * @param point the Task entity
+     * @return TaskDto
+     */
+    public PointResponseDto pointToDto(Point point) {
+        return new PointResponseDto(
+                point.getPointId(),
+                point.getNumber(),
+                point.getDescription(),
+                point.getCompleted()
+        );
+    }
+
+    /**
+     * Convert list of Point entities to list of PointEntityDto
+     *
+     * @param points list of Point entities
+     * @return list of PointEntityDto
+     */
+    public List<PointResponseDto> pointsToDtoList(List<Point> points) {
+        return points.stream()
+                .map(this::pointToDto)
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Convert Video entity to VideoDto
+     *
+     * @param video the Task entity
+     * @return TaskDto
+     */
+    public VideoResponseDto videoToDto(Video video) {
+        return new VideoResponseDto(
+                video.getVideoId(),
+                video.getTitle(),
+                video.getLatitude(),
+                video.getLongitude()
+        );
+    }
+
+    /**
+     * Convert list of Video entities to list of VideoEntityDto
+     *
+     * @param videos list of Video entities
+     * @return list of VideoEntityDto
+     */
+    public List<VideoResponseDto> videosToDtoList(List<Video> videos) {
+        return videos.stream()
+                .map(this::videoToDto)
+                .collect(Collectors.toList());
+
     }
 }

@@ -1,7 +1,6 @@
 package com.geo_surveys.geo_surveys_api.service;
 
 import com.geo_surveys.geo_surveys_api.dto.request.VideoCreateRequestDto;
-import com.geo_surveys.geo_surveys_api.dto.response.VideoResponseDto;
 import com.geo_surveys.geo_surveys_api.entity.Task;
 import com.geo_surveys.geo_surveys_api.entity.Video;
 import com.geo_surveys.geo_surveys_api.repository.VideoRepository;
@@ -120,34 +119,6 @@ public class VideoService {
             counter++;
         }
         return result;
-    }
-
-    /**
-     * Convert Video entity to VideoDto
-     *
-     * @param video the Task entity
-     * @return TaskDto
-     */
-    public VideoResponseDto toDto(Video video) {
-        return new VideoResponseDto(
-                video.getVideoId(),
-                video.getTitle(),
-                video.getLatitude(),
-                video.getLongitude()
-        );
-    }
-
-    /**
-     * Convert list of Video entities to list of VideoEntityDto
-     *
-     * @param videos list of Video entities
-     * @return list of VideoEntityDto
-     */
-    public List<VideoResponseDto> toDtoList(List<Video> videos) {
-        return videos.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-
     }
 
 }

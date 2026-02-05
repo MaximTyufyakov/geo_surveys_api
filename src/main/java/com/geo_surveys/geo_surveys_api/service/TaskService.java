@@ -1,6 +1,5 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.dto.response.TaskResponseDto;
 import com.geo_surveys.geo_surveys_api.dto.request.TaskUpdateRequestDto;
 import com.geo_surveys.geo_surveys_api.entity.Point;
 import com.geo_surveys.geo_surveys_api.entity.Task;
@@ -12,7 +11,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -51,8 +49,8 @@ public class TaskService {
      * @param userId is user id
      * @return list of tasks.
      */
-    public List<TaskResponseDto> getAll(Long userId) {
-        return toDtoList(taskRepo.findAllByUserId(userId));
+    public List<Task> getAll(Long userId) {
+        return taskRepo.findAllByUserId(userId);
     }
 
     /**
@@ -64,7 +62,7 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if entity not found.
      */
-    public TaskResponseDto getOne(Long userId, Long taskId)
+    public Task getOne(Long userId, Long taskId)
             throws AccessDeniedException, EntityNotFoundException {
         // Check relation.
         if (userTaskService.existRelation(userId, taskId)) {
@@ -72,7 +70,7 @@ public class TaskService {
 
             // Check task exist.
             if (task != null) {
-                return toDto(task);
+                return task;
             } else {
                 throw new EntityNotFoundException("Задание не найдено");
             }
@@ -90,7 +88,7 @@ public class TaskService {
      * @throws AccessDeniedException   if user doesn't have access to task.
      * @throws EntityNotFoundException if task not found.
      */
-    public TaskResponseDto update(Long userId, TaskUpdateRequestDto taskUpdateRequestDto)
+    public Task update(Long userId, TaskUpdateRequestDto taskUpdateRequestDto)
             throws AccessDeniedException, EntityNotFoundException {
         // Check user-task relation.
         if (userTaskService.existRelation(userId, taskUpdateRequestDto.getTaskId())) {
@@ -126,7 +124,7 @@ public class TaskService {
                 // Task update.
                 task.setCompleted(completed);
                 task.setReport(taskUpdateRequestDto.getReport());
-                return toDto(taskRepo.save(task));
+                return taskRepo.save(task);
 
             } else {
                 throw new EntityNotFoundException("Задание не найдено");
@@ -134,39 +132,6 @@ public class TaskService {
         } else {
             throw new AccessDeniedException("Нет доступа");
         }
-
-    }
-
-    /**
-     * Convert Task entity to TaskDto
-     *
-     * @param task the Task entity
-     * @return TaskDto
-     */
-    public TaskResponseDto toDto(Task task) {
-        return new TaskResponseDto(
-                task.getTaskId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getLatitude(),
-                task.getLongitude(),
-                task.getCompleted(),
-                task.getReport(),
-                pointService.toDtoList(task.getPoints()),
-                videoService.toDtoList(task.getVideos())
-        );
-    }
-
-    /**
-     * Convert list of Task entities to list of TaskEntityDto
-     *
-     * @param tasks list of Task entities
-     * @return list of TaskEntityDto
-     */
-    public List<TaskResponseDto> toDtoList(List<Task> tasks) {
-        return tasks.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
 
     }
 
