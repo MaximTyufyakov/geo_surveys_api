@@ -25,5 +25,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             " ORDER BY t.taskId ASC")
     List<Task> findAllByUserId(@Param("userId") Long userId);
 
-    List<Task> findAllByTitle(String title);
 }

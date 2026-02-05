@@ -23,7 +23,7 @@ public class TaskService {
      * Database repository for task.
      */
     @Autowired
-    private final TaskRepository taskRepo;
+    private TaskRepository taskRepo;
 
     /**
      * Point service.
@@ -42,10 +42,6 @@ public class TaskService {
      */
     @Autowired
     UserTaskService userTaskService;
-
-    public TaskService(TaskRepository taskRepo) {
-        this.taskRepo = taskRepo;
-    }
 
     /**
      * Get all tasks for user.

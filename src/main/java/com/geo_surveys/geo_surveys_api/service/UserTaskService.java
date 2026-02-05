@@ -1,12 +1,8 @@
 package com.geo_surveys.geo_surveys_api.service;
 
-import com.geo_surveys.geo_surveys_api.entity.UserTask;
 import com.geo_surveys.geo_surveys_api.repository.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
